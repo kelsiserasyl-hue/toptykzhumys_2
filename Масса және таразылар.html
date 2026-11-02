@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="kk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Масса және таразылар</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#eef8ff;--bg2:#cfe9fb;--ink:#12324d;--card:#fff;--line:#c4dcee;--blue:#1f6fb2;--ok:#1d9a55;--bad:#b4551f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#10263a;--bg2:#0c1b2b;--ink:#e6f2fc;--card:#173149;--line:#2b4b68}}
+:root[data-theme="dark"]{--bg1:#10263a;--bg2:#0c1b2b;--ink:#e6f2fc;--card:#173149;--line:#2b4b68}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%}
+body{background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;color:var(--ink);font:400 15px/1.45 'Noto Sans',system-ui,sans-serif}
+main{max-width:880px;margin:0 auto;padding:10px 12px 18px}
+h1{margin:4px 0 2px;font:800 clamp(20px,4.5vw,28px)/1.15 'Noto Sans',sans-serif;color:var(--blue);text-align:center}
+.sub{text-align:center;margin:0 0 8px;font-size:14px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.b{font:700 14px/1.15 'Noto Sans',system-ui,sans-serif;color:#fff;background:linear-gradient(#45a0ea,#1f6fb2);border:0;border-radius:12px;padding:10px 8px;box-shadow:0 5px 0 #14507f,0 9px 14px rgba(20,80,127,.3);cursor:pointer;transition:transform .12s,box-shadow .12s,filter .12s}
+.b:hover{filter:brightness(1.08)}
+.b:active{transform:translateY(4px);box-shadow:0 1px 0 #14507f}
+.b.on{background:linear-gradient(#f4c34f,#dca21c);color:#3a2900;box-shadow:0 5px 0 #96700f,0 9px 14px rgba(150,112,15,.35)}
+.b.g{background:linear-gradient(#5fcf8c,#1d9a55);box-shadow:0 5px 0 #136b3a,0 9px 14px rgba(19,107,58,.3)}
+.b.s{padding:8px 11px;font-size:13px}
+button:focus-visible,select:focus-visible{outline:3px solid #7b4fc0;outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:0 8px 20px rgba(20,60,100,.14)}
+canvas{width:100%;height:auto;max-height:52vh;display:block;border-radius:12px;background:linear-gradient(#fafdff,#d8ecfb);border:1px solid var(--line);cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.info{padding:8px 10px;border-left:5px solid #dca21c;background:rgba(220,162,28,.14);border-radius:8px;min-height:3em}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:14px;font-weight:600}
+.q{border-top:1px dashed var(--line);padding:8px 0}.q:first-child{border-top:0}
+.q p{margin:0 0 4px;font-weight:600}.q label{display:block;padding:3px 0;cursor:pointer}
+.q .b{margin-top:6px;padding:8px 14px}
+.fb{margin-top:6px;padding:6px 10px;border-radius:8px}.fb:empty{display:none}
+.fb.g{background:rgba(29,154,85,.16);border-left:5px solid var(--ok)}
+.fb.w{background:rgba(180,85,31,.14);border-left:5px solid var(--bad)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.det{margin-top:8px;display:grid;gap:4px}
+.det div{padding:6px 10px;border-radius:8px;background:rgba(31,111,178,.1)}
+.det b{color:var(--blue)}
+.mr{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:18px;font-weight:700}
+.slot{min-width:130px;min-height:42px;padding:8px 12px;border:3px dashed #7aa7cc;border-radius:12px;text-align:center;background:rgba(31,111,178,.07)}
+.slot.ok{border:3px solid var(--ok);background:rgba(29,154,85,.15)}.slot.bad{border:3px solid var(--bad);background:rgba(180,85,31,.14)}
+.chip.dc{cursor:grab;user-select:none;touch-action:none;font-size:17px;padding:8px 16px;box-shadow:0 4px 0 #9bbbd4;background:#fff;color:#12324d}
+.chip.dc.sel{outline:3px solid #dca21c}
+.chip.drag{position:fixed;z-index:99;pointer-events:none;opacity:.9}
+@media(max-width:560px){.tabs{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><main>
+<h1>МАССА ЖӘНЕ ТАРАЗЫЛАР</h1>
+<p class="sub">Зат таңда, таразыға қой, өлшеп, нәтижені салыстыр &nbsp; <span class="chip" id="sc">Ұпай: 0/11</span></p>
+<div class="tabs" id="mt"><button class="b on" onclick="show(0)">1. Массаны өлше</button><button class="b" onclick="show(1)">2. Таразыны таны</button><button class="b" onclick="show(2)">3. Сәйкестендір</button><button class="b" onclick="show(3)">4. Тест</button></div>
+
+<section class="card pn" id="p0">
+<canvas id="cv" width="640" height="330" aria-label="Виртуалды зертхана: үш түрлі таразы мен заттар"></canvas>
+<div class="row"><b>Өлшегіштер:</b>
+<button class="b s" onclick="aw(500)">500 г</button><button class="b s" onclick="aw(200)">200 г</button><button class="b s" onclick="aw(100)">100 г</button><button class="b s" onclick="aw(50)">50 г</button><button class="b s" onclick="aw(20)">20 г</button><button class="b s" onclick="aw(10)">10 г</button><button class="b s" onclick="aw(5)">5 г</button>
+<button class="b s" onclick="W=[];msg()">Өлшегіштерді алу</button><button class="b s g" onclick="unit=unit=='г'?'кг':'г';msg()">Электрондық таразы: г / кг</button></div>
+<div class="info" id="i1"></div></section>
+
+<section class="card pn" id="p1" hidden><div class="cards" id="tc"></div><div class="det" id="td"></div>
+<h3 style="margin:14px 0 4px">Қайсысы массаны, қайсысы күшті өлшейді?</h3><div id="cl"></div>
+<button class="b" onclick="chkC()">ТЕКСЕРУ</button><div class="fb" id="cf" role="status"></div></section>
+
+<section class="card pn" id="p2" hidden><p style="margin:2px 0 6px">Өлшем бірлігін сүйреп апарып, тиісті орынға қой (немесе басып таңда, сосын орынды бас).</p>
+<div id="mp" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px"></div><div id="ms"></div>
+<button class="b" onclick="chkM()">ТЕКСЕРУ</button><div class="fb" id="mf" role="status"></div></section>
+
+<section class="card pn" id="p3" hidden><div id="t"></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),c=$('#cv').getContext('2d');
+const IT=[{n:'Алма',m:200},{n:'Кітап',m:500},{n:'Металл бөлшек',m:800},{n:'Қант салынған ыдыс',m:600}];
+const kg=m=>(m/1000).toString().replace('.',',');
+let th=0,unit='г',W=[],sel=-1,on={b:-1,e:-1,s:-1};
+const sumW=()=>W.reduce((a,b)=>a+b,0),placed=i=>Object.values(on).includes(i),sx=i=>95+i*150;
+const sc={cl:0,mt:0,ts:new Set};
+function upd(){$('#sc').textContent='Ұпай: '+(sc.cl+sc.mt+sc.ts.size)+'/11 (сәйкестендіру '+sc.mt+'/3, тест '+sc.ts.size+'/5)'}
+function show(i){document.querySelectorAll('.pn').forEach((p,k)=>p.hidden=k!=i);document.querySelectorAll('#mt .b').forEach((b,k)=>b.classList.toggle('on',k==i))}
+/* ---- drawing ---- */
+function box(x,y,w,h,d,f,t,s){c.fillStyle=f;c.fillRect(x,y,w,h);c.fillStyle=t;c.beginPath();c.moveTo(x,y);c.lineTo(x+d,y-d);c.lineTo(x+w+d,y-d);c.lineTo(x+w,y);c.fill();c.fillStyle=s;c.beginPath();c.moveTo(x+w,y);c.lineTo(x+w+d,y-d);c.lineTo(x+w+d,y+h-d);c.lineTo(x+w,y+h);c.fill()}
+function txt(t,x,y,sz,col,al='center',wt=700,f="'Noto Sans',sans-serif"){c.fillStyle=col;c.font=`${wt} ${sz}px ${f}`;c.textAlign=al;c.fillText(t,x,y)}
+function item(k,x,yb){c.save();c.fillStyle='rgba(20,60,100,.18)';c.beginPath();c.ellipse(x,yb+1,20,4,0,0,6.3);c.fill();
+ if(k==0){const g=c.createRadialGradient(x-5,yb-20,2,x,yb-14,16);g.addColorStop(0,'#ff8a7a');g.addColorStop(1,'#c0261b');c.fillStyle=g;c.beginPath();c.arc(x-5,yb-14,13,0,6.3);c.arc(x+5,yb-14,13,0,6.3);c.fill();c.strokeStyle='#5a3a1a';c.lineWidth=2;c.beginPath();c.moveTo(x,yb-26);c.lineTo(x+3,yb-34);c.stroke();c.fillStyle='#2e9a45';c.beginPath();c.ellipse(x+9,yb-32,7,3.5,-.5,0,6.3);c.fill()}
+ if(k==1){box(x-24,yb-14,48,14,7,'#2b6fdc','#7aa8f0','#1d4ea3');c.fillStyle='#f6f1e0';c.fillRect(x-22,yb-12,44,10);c.fillStyle='#1d4ea3';c.fillRect(x-24,yb-14,5,14);txt('Физика',x+2,yb-4,8,'#12324d','center',700)}
+ if(k==2){const g=c.createLinearGradient(x-15,0,x+15,0);g.addColorStop(0,'#8e9aa6');g.addColorStop(.5,'#e3e9ee');g.addColorStop(1,'#6e7b88');c.fillStyle=g;c.fillRect(x-15,yb-26,30,26);c.beginPath();c.ellipse(x,yb,15,4,0,0,6.3);c.fill();c.fillStyle='#d4dce3';c.beginPath();c.ellipse(x,yb-26,15,4.5,0,0,6.3);c.fill()}
+ if(k==3){c.fillStyle='rgba(190,225,245,.75)';c.fillRect(x-16,yb-34,32,34);c.fillStyle='#fff';c.fillRect(x-14,yb-24,28,24);c.fillStyle='#b8864a';c.fillRect(x-18,yb-40,36,7);c.fillStyle='#2b6fdc';c.fillRect(x-9,yb-17,18,8);txt('қант',x,yb-10.5,7,'#fff','center',700);c.strokeStyle='#8fb7d0';c.lineWidth=1;c.strokeRect(x-16,yb-34,32,34)}
+ c.restore()}
+function drawBal(){const cx=110,py=100,L=80,a=th,lx=cx-L*Math.cos(a),ly=py+L*Math.sin(a),rx=cx+L*Math.cos(a),ry=py-L*Math.sin(a);
+ box(cx-55,208,110,12,12,'#8fb2cc','#bcd6e8','#6e92ad');const g=c.createLinearGradient(cx-7,0,cx+7,0);g.addColorStop(0,'#9db2c4');g.addColorStop(.5,'#eef4f9');g.addColorStop(1,'#7b92a6');c.fillStyle=g;c.fillRect(cx-6,py,12,110);
+ c.strokeStyle='#6e7f8e';c.lineWidth=1.2;[[lx,ly],[rx,ry]].forEach(([x,y])=>{c.beginPath();c.moveTo(x,y);c.lineTo(x-36,y+58);c.moveTo(x,y);c.lineTo(x+36,y+58);c.stroke()});
+ [[lx,ly],[rx,ry]].forEach(([x,y])=>{const pg=c.createLinearGradient(0,y+56,0,y+66);pg.addColorStop(0,'#e8eef3');pg.addColorStop(1,'#8fa3b3');c.fillStyle=pg;c.beginPath();c.ellipse(x,y+60,40,6,0,0,6.3);c.fill()});
+ c.strokeStyle='#7b8d9d';c.lineWidth=6;c.lineCap='round';c.beginPath();c.moveTo(lx,ly);c.lineTo(rx,ry);c.stroke();c.fillStyle='#dca21c';c.beginPath();c.arc(cx,py,7,0,6.3);c.fill();
+ if(on.b>=0)item(on.b,lx,ly+55);
+ W.slice(0,12).forEach((w,j)=>{const x=rx-24+(j%4)*16,y=ry+55-Math.floor(j/4)*10;c.fillStyle='#667684';c.fillRect(x-6,y-9,12,9);c.fillStyle='#9fb0be';c.fillRect(x-6,y-9,12,3);txt(w>=100?w/100+'':'',x,y-1,6,'#fff','center',700)});
+ txt('Иіндік таразы',cx,24,14,'#12324d');txt('Өлшегіштер: '+sumW()+' г',rx,ry+84,11,'#4a6a85','center',600)}
+function drawEl(){const cx=320;box(cx-70,176,140,34,16,'#e9f0f6','#ffffff','#b8c8d6');c.fillStyle='#1e2d38';c.fillRect(cx-56,184,112,22);
+ const m=on.e>=0?IT[on.e].m:0;txt(unit=='г'?m+' г':kg(m)+' кг',cx,201,18,'#54ffa1','center',700,'monospace');
+ box(cx-56,152,112,8,14,'#c9d4de','#eef3f7','#9fb0be');if(on.e>=0)item(on.e,cx+6,150);txt('Электрондық таразы',cx,24,14,'#12324d')}
+function drawSp(){const cx=530,F=on.s>=0?IT[on.s].m/100:0,py=52+F*12;
+ c.strokeStyle='#8a99a7';c.lineWidth=5;c.beginPath();c.moveTo(cx-50,34);c.lineTo(cx+50,34);c.stroke();
+ const g=c.createLinearGradient(cx-18,0,cx+18,0);g.addColorStop(0,'#aebdca');g.addColorStop(.5,'#f2f6fa');g.addColorStop(1,'#8497a8');c.fillStyle=g;c.fillRect(cx-18,36,36,150);c.fillStyle='#1b2a36';c.fillRect(cx-9,46,18,134);
+ for(let i=0;i<=10;i++){c.fillStyle='#cfe3f2';c.fillRect(cx-9,50+i*12,i%5==0?12:7,1.5);if(i%2==0)txt(i+'',cx-23,54+i*12,9,'#12324d','right',600)}
+ c.strokeStyle='#e8c15a';c.lineWidth=2;c.beginPath();c.moveTo(cx,46);for(let y=46,k=0;y<py;y+=5,k++)c.lineTo(cx+(k%2?4:-4),y);c.stroke();
+ c.fillStyle='#e8362a';c.beginPath();c.moveTo(cx+9,py);c.lineTo(cx+22,py-6);c.lineTo(cx+22,py+6);c.fill();
+ c.strokeStyle='#6e7f8e';c.lineWidth=3;c.beginPath();c.moveTo(cx,186);c.lineTo(cx,204);c.stroke();c.beginPath();c.arc(cx,210,6,0,6.3);c.stroke();
+ if(on.s>=0){c.lineWidth=1.2;c.beginPath();c.moveTo(cx,216);c.lineTo(cx,262-(on.s==3?40:on.s==2?26:on.s==0?34:14));c.stroke();item(on.s,cx,262)}
+ txt('Серіппелі таразы',cx,24,14,'#12324d');txt('F = '+F+' Н',cx,282,12,'#b4551f','center',700)}
+function draw(){c.clearRect(0,0,640,330);drawBal();drawEl();drawSp();
+ c.fillStyle='#b9d3e8';c.fillRect(0,268,640,62);c.fillStyle='#8fb2cc';c.fillRect(0,268,640,4);
+ IT.forEach((it,i)=>{if(!placed(i)){if(sel==i){c.fillStyle='rgba(220,162,28,.35)';rr(sx(i)-48,274,96,52,10);c.fill();c.strokeStyle='#dca21c';c.lineWidth=3;c.stroke()}item(i,sx(i),306);txt(it.n,sx(i),322,10,'#12324d','center',600)}});
+ c.strokeStyle='#c3d7e6';c.lineWidth=1;c.setLineDash([4,4]);[230,440].forEach(x=>{c.beginPath();c.moveTo(x,10);c.lineTo(x,262);c.stroke()});c.setLineDash([])}
+function rr(x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+/* ---- logic ---- */
+function aw(g){if(W.length<16)W.push(g);msg()}
+function msg(){const L=[];
+ if(on.b>=0){const m=IT[on.b].m,d=m-sumW();L.push('<b>Иіндік таразы:</b> '+IT[on.b].n+' — '+(d==0?`тепе-теңдік! Массасы = ${m} г (${kg(m)} кг).`:d>0?'сол жақ табақша ауыр, оң жаққа өлшегіш қос.':'оң жақ табақша ауыр, өлшегіштерді азайт.'))}
+ if(on.e>=0){const m=IT[on.e].m;L.push(`<b>Электрондық таразы:</b> ${IT[on.e].n} — ${m} г (${kg(m)} кг).`)}
+ if(on.s>=0){const m=IT[on.s].m;L.push(`<b>Серіппелі таразы:</b> ${IT[on.s].n} — F = ${m/100} Н. Ол массаны емес, күшті (Н) көрсетеді.`)}
+ $('#i1').innerHTML=L.length?L.join('<br>'):'Төмендегі сөреден затты бас, сосын таразыны бас. Иіндік таразыда оң табақшаға өлшегіштер қос. Қойылған затты қайта бассаң, сөреге оралады.'}
+$('#cv').onclick=e=>{const r=e.target.getBoundingClientRect(),x=(e.clientX-r.left)*640/r.width,y=(e.clientY-r.top)*330/r.height;
+ if(y>=268){const i=Math.round((x-95)/150);if(i>=0&&i<4&&Math.abs(x-sx(i))<50&&!placed(i))sel=sel==i?-1:i;return}
+ const k=x<230?'b':x<440?'e':'s';
+ if(sel>=0){Object.keys(on).forEach(q=>{if(on[q]==sel)on[q]=-1});on[k]=sel;sel=-1}else if(on[k]>=0)on[k]=-1;msg()};
+function loop(){const d=on.b>=0?IT[on.b].m:0,df=d-sumW(),tg=df==0?0:Math.max(-1,Math.min(1,df/150))*.22;th+=(tg-th)*.12;draw();requestAnimationFrame(loop)}
+msg();loop();
+/* ---- recognise ---- */
+const TZ=[{n:'Иіндік таразы',a:'Тепе-теңдік иіні, екі табақша, тұғыр, өлшегіштер жиынтығы',b:'Аптекада және зертханада массаны өлшеуге және денелердің массасын салыстыруға',c:'Масса (г, кг)',k:'Масса'},{n:'Электрондық таразы',a:'Платформа, датчик және сандық дисплей',b:'Дүкенде, асханада, зертханада массаны тез әрі дәл өлшеуге',c:'Масса (г, кг)',k:'Масса'},{n:'Серіппелі таразы',a:'Серіппе, шкала, көрсеткіш және ілгек',b:'Күшті, мысалы, дененің салмағын өлшеуге',c:'Күш (Н, ньютон)',k:'Күш'}];
+$('#tc').innerHTML=TZ.map((t,i)=>`<button class="b" onclick="info(${i})">${t.n}</button>`).join('');
+function info(i){const t=TZ[i];$('#td').innerHTML=`<div><b>Атауы:</b> ${t.n}</div><div><b>Құрылысы:</b> ${t.a}</div><div><b>Қолданылуы:</b> ${t.b}</div><div><b>Өлшейтін шама:</b> ${t.c}</div>`}
+info(0);
+$('#cl').innerHTML=TZ.map((t,i)=>`<div class="mr" style="font-size:15px"><span style="min-width:170px">${t.n}</span><select id="cs${i}"><option value="">таңда…</option><option>Масса</option><option>Күш</option></select></div>`).join('');
+function chkC(){const f=$('#cf');let n=0,e=false;TZ.forEach((t,i)=>{const v=$('#cs'+i).value;if(!v)e=true;if(v==t.k)n++});if(e){f.className='fb w';f.textContent='Үш таразы үшін де жауап таңда.';return}
+ sc.cl=Math.max(sc.cl,n);upd();f.className='fb '+(n==3?'g':'w');f.textContent=n==3?'✓ Дұрыс! Иіндік және электрондық таразы массаны, серіппелі таразы күшті өлшейді.':`Дұрыс жауап саны: ${n}/3. Есіңде болсын: серіппелі таразы ньютонмен күшті көрсетеді, ал массаны грамм не килограммен өлшейтін таразыларды қайта қара.`}
+/* ---- matching ---- */
+const MR=[['1 т =','1000 кг'],['1 кг =','1000 г'],['1 г =','1000 мг']];
+$('#mp').innerHTML=['1000 мг','1000 кг','1000 г'].map(v=>`<span class="chip dc">${v}</span>`).join('');
+$('#ms').innerHTML=MR.map(r=>`<div class="mr"><span style="min-width:80px">${r[0]}</span><span class="slot" data-a="${r[1]}" aria-label="орын"></span></div>`).join('');
+let drag=null,pick=null,tap=null;
+function setS(s,v){s.textContent=v;s.dataset.v=v;s.classList.remove('ok','bad')}
+document.querySelectorAll('.dc').forEach(ch=>ch.addEventListener('pointerdown',e=>{pick=ch;drag=ch.cloneNode(true);drag.className='chip dc drag';document.body.appendChild(drag);mv(e);e.preventDefault()}));
+function mv(e){drag.style.left=e.clientX-45+'px';drag.style.top=e.clientY-20+'px'}
+addEventListener('pointermove',e=>{if(drag)mv(e)});
+addEventListener('pointerup',e=>{if(!drag)return;drag.remove();drag=null;const el=document.elementFromPoint(e.clientX,e.clientY),s=el&&el.closest('.slot');
+ document.querySelectorAll('.dc').forEach(x=>x.classList.remove('sel'));if(s){setS(s,pick.textContent);tap=null}else{tap=pick;pick.classList.add('sel')}});
+document.querySelectorAll('.slot').forEach(s=>s.onclick=()=>{if(tap){setS(s,tap.textContent);tap.classList.remove('sel');tap=null}});
+function chkM(){const f=$('#mf'),S=[...document.querySelectorAll('.slot')];if(S.some(s=>!s.dataset.v)){f.className='fb w';f.textContent='Барлық орынды толтыр.';return}
+ let n=0;S.forEach(s=>{const ok=s.dataset.v==s.dataset.a;s.classList.add(ok?'ok':'bad');if(ok)n++});sc.mt=Math.max(sc.mt,n);upd();
+ f.className='fb '+(n==3?'g':'w');f.textContent=n==3?'✓ Дұрыс! Әр келесі бірлік алдыңғыдан 1000 есе кіші: 1 т = 1000 кг, 1 кг = 1000 г, 1 г = 1000 мг.':`Дұрыс жауап: ${n}/3. Қызыл орындарды ауыстырып көр: 1 тоннада 1000 килограмм бар, килограммда — 1000 грамм, граммда — 1000 миллиграмм.`}
+/* ---- test ---- */
+const Q={};
+function qz(id,q,o,a){Q[id]={o:o.map(x=>x.split('|')),a};return `<div class="q"><p>${q}</p>${Q[id].o.map((x,j)=>`<label><input type="radio" name="r${id}" value="${j}"> ${x[0]}</label>`).join('')}<button class="b" onclick="ck('${id}')">ТЕКСЕРУ</button><div class="fb" id="f${id}" role="status"></div></div>`}
+function ck(id){const r=document.querySelector(`input[name="r${id}"]:checked`),f=$('#f'+id);if(!r){f.className='fb w';f.textContent='Алдымен жауап нұсқасын таңда.';return}
+ const j=+r.value,ok=j==Q[id].a;if(ok)sc.ts.add(id);upd();f.className='fb '+(ok?'g':'w');f.textContent=(ok?'✓ Дұрыс! ':'✗ Қате. ')+Q[id].o[j][1]+(ok?' +1 ұпай.':' Қайтадан ойланып көр.')}
+$('#t').innerHTML=
+qz('t1','1-тапсырма. Заттың массасын өлшейтін құралды анықта.',['Термометр|Термометр температураны өлшейді.','Таразы|Таразы массаны өлшеуге арналған.','Сызғыш|Сызғыш ұзындықты өлшейді.'],1)+
+qz('t2','2-тапсырма. Серіппесі, шкаласы мен ілгегі бар, күшті ньютонмен көрсететін таразы қай түрге жатады?',['Иіндік таразы|Иіндік таразыда табақшалар мен өлшегіштер болады.','Электрондық таразы|Электрондық таразыда сандық дисплей болады.','Серіппелі таразы|Серіппелі таразы күшті өлшейді.'],2)+
+qz('t3','3-тапсырма. СИ жүйесінде массаның негізгі өлшем бірлігін таңда.',['Грамм|Грамм — массаның бөлшек бірлігі, негізгісі емес.','Килограмм|Килограмм — массаның негізгі бірлігі.','Ньютон|Ньютон — күштің өлшем бірлігі.'],1)+
+qz('t4','4-тапсырма. 3 кг неше грамм?',['300 г|3 кг = 3 · 1000 г, ал 300 — тым аз.','3000 г|1 кг = 1000 г болғандықтан, 3 кг = 3000 г.','30 г|1 кг = 1000 г екенін еске түсір.'],1)+
+qz('t5','5-тапсырма. Массасы: алма — 200 г, кітап — 0,5 кг, металл бөлшек — 800 г. Массаларын өсу ретімен орналастыр.',['Кітап, алма, металл бөлшек|0,5 кг = 500 г, ал алма 200 г — одан жеңіл.','Алма, кітап, металл бөлшек|Бірдей бірлікке келтірсек: 200 г < 500 г < 800 г.','Металл бөлшек, кітап, алма|Бұл кему реті, ал өсу реті сұралған.'],1);
+upd();
+</script></body></html>
